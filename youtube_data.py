@@ -448,3 +448,4 @@ class YouTubeSearch(YouTubeAPI):
             best_ranking_channels = list(set(best_ranking_channels))
 
         return best_ranking_channels
+    
