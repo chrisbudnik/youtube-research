@@ -5,9 +5,9 @@ from google.cloud import bigquery
 class Schema:
     """
     Schema class serves as a storage for bigquery schemas. 
-    Names relate to corresonding main project tables. 
+    Names relate to corresonding main youtube-research project tables. 
     The purpose of this class is to simplify the set-up process for 
-    youtube data analysis
+    youtube data analysis.
     """
     VIDEO_BASE = [
         bigquery.SchemaField("video_id", "STRING", mode="REQUIRED"),
