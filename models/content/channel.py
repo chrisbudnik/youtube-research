@@ -1,6 +1,6 @@
-from content import YouTubeAPI
-from video import Video
-from playlist import Playlist
+from .content import YouTubeAPI
+from .video import Video
+from .playlist import Playlist
 
 
 class Channel(YouTubeAPI):

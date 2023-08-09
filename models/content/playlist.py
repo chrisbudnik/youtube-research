@@ -1,6 +1,6 @@
 from typing import List, Tuple
-from content import YouTubeAPI
-from video import Video
+from .content import YouTubeAPI
+from .video import Video
 
 
 class Playlist(YouTubeAPI):

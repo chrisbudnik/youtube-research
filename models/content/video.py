@@ -2,7 +2,7 @@ import re
 from dateutil.parser import parse
 from datetime import datetime
 from youtube_transcript_api import YouTubeTranscriptApi
-from content import YouTubeAPI
+from .content import YouTubeAPI
 
 
 class Video(YouTubeAPI):
