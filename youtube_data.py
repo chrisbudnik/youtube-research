@@ -5,7 +5,7 @@ from typing import Literal, Optional, Union, List, Tuple
 from tqdm import tqdm
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
-from config import Config
+from configuration import Config
 
 
 class YouTubeAPI:
