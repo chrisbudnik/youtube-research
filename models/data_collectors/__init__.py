@@ -1,2 +1,2 @@
-from .data_collector import YouTubeVideoCollector
+from .data_collector import VideoDataCollector
 from .channel_collector import YouTubeChannelCollector

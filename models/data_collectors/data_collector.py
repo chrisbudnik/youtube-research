@@ -3,7 +3,7 @@ from tqdm import tqdm
 from models.content.channel import Channel, Video
 
 
-class YouTubeVideoCollector:
+class VideoDataCollector:
     """
     YoutubeDataCollector class is responsibe for gathering data via custom interface for
     YouTube api. It provides two methods for data collection: collect_data_from_channel and collect_data_from_videos.
