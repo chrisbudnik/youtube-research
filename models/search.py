@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 from typing import Literal, Union, List
-from content import Video, Channel, Playlist, YouTubeAPI
+from models.content import Video, Channel, Playlist, YouTubeAPI
 
 
 class YouTubeSearch(YouTubeAPI):
