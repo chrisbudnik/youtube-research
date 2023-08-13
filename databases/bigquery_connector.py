@@ -9,7 +9,6 @@ from configuration import Config
 from .bigquery_schemas import Schema
 
 
-
 class TableNames(Enum):
     VIDEO_BASE = "video_base"
     VIDEO_STATS = "video_stats"
@@ -36,7 +35,7 @@ class BigQueryConnector:
     def automated_create_tables(self) -> None:
         """
         Automatically create tables with pre-defined schemas if they don't already exist.
-        In other case, error is raised to prevent data loss
+        In other case, error is raised to prevent data loss.
         """
         for table_id, schema in tqdm(zip(self.TABLE_NAMES, self.SCHEMAS), desc="Creating main project tables..."):
             table_ref = self.client.dataset(self.dataset_id).table(table_id)
