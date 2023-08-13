@@ -1,8 +1,8 @@
 from google.cloud import bigquery
-
+from enum import Enum
 
 # TO-DO: prepare schema for video_text table
-class Schema:
+class Schema(Enum):
     """
     Schema class serves as a storage for bigquery schemas. 
     Names relate to corresonding main youtube-research project tables. 
