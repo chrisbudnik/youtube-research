@@ -22,8 +22,8 @@ class BigQueryConnector:
     insert data, and retrieve data from the defined schemas and table names.
     """
 
-    SCHEMAS = [Schema.VIDEO_BASE, Schema.VIDEO_STATS, Schema.VIDEO_TEXT, Schema.CHANNELS]
-    TABLE_NAMES = ["video_base", "video_stats", "video_text", "channels"]
+    SCHEMAS = [tbl.value for tbl in list(Schema)]
+    TABLE_NAMES = [tbl.value for tbl in list(TableNames)]
 
     def __init__(self, dataset_id):
         """
@@ -52,7 +52,9 @@ class BigQueryConnector:
         print(f"Succesfully created youtube-research tables: {self.TABLE_NAMES}")
 
     def automated_insert(self, table_name: str, rows: list) -> None:
-        """Insert rows into the specified table."""
+        """
+        Insert rows into the specified table.
+        """
         table_ref = self.client.dataset(self.dataset_id).table(table_name)
         table = self.client.get_table(table_ref)
         errors = self.client.insert_rows(table, rows)
@@ -60,4 +62,3 @@ class BigQueryConnector:
         if errors:
             raise Exception(f"Encountered errors while inserting rows into {table_name}: {errors}")
 
-\
