@@ -9,19 +9,21 @@ class Channel(YouTubeAPI):
     Integrated with the YouTube API, this class provides methods to fetch core details 
     about the channel and its uploaded videos.
     """
-    def __init__(self, channel_id: str):
+    def __init__(self, channel_id: str) -> None:
         super().__init__()
         self.channel_id = channel_id
+        self.validate = False
 
-        response = self.get_channel_response(self.channel_id, 'snippet')
-        if not response.get('items'):
-            raise ValueError(f'Invalid channel ID: {self.channel_id}')
+        if self.validate:
+            response = self.get_channel_response(self.channel_id, 'snippet')
+            if not response.get('items'):
+                raise ValueError(f'Invalid channel ID: {self.channel_id}')
         
         self._channel_name = None  
         self._uploads_playlist_id = None
     
-    def __repr__(self):
-        return f"Channel(channel_id={self.channel_id}, channel_name={self.channel_name})"
+    def __repr__(self) -> str:
+        return f"Channel(channel_id={self.channel_id})"
 
     def __eq__(self, other):
         if isinstance(other, Channel):
@@ -62,6 +64,12 @@ class Channel(YouTubeAPI):
         response = self.get_channel_response(self.channel_id, 'statistics')
         self._subscriber_count = int(response['items'][0]['statistics']['subscriberCount'])
         return self._subscriber_count
+    
+    def info(self) -> tuple:
+        """
+        Returns in a tuple: channel ID, channel name, channel uploads playlist ID and subscriber count.
+        """
+        return (self.channel_id, self.channel_name, self.uploads_playlist_id, self.subscriber_count)
     
     def get_channel_videos(self, max_results=5) -> list[Video]:
         """
