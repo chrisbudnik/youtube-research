@@ -9,7 +9,7 @@ from configuration import Config
 from .bigquery_schemas import Schema
 
 
-class TableNames(Enum):
+class BigQueryTableNames(Enum):
     VIDEO_BASE = "video_base"
     VIDEO_STATS = "video_stats"
     VIDEO_TEXT = "video_text"
@@ -23,7 +23,7 @@ class BigQueryConnector:
     """
 
     SCHEMAS = [tbl.value for tbl in list(Schema)]
-    TABLE_NAMES = [tbl.value for tbl in list(TableNames)]
+    TABLE_NAMES = [tbl.value for tbl in list(BigQueryTableNames)]
 
     def __init__(self, dataset_id):
         """
