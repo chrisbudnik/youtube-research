@@ -21,18 +21,20 @@ class Video(YouTubeAPI):
     def __init__(self, video_id:str) -> None:
         super().__init__()
         self.video_id = video_id
+        self.validate = False
 
-        # check if video exists, else return error
-        response = self.get_video_response(self.video_id, 'snippet')
-        if not response.get('items'):
-            raise ValueError(f'Invalid video ID: {self.video_id}')
+        # check if video exists, else return error - turned off to save api quotas
+        if self.validate:
+            response = self.get_video_response(self.video_id, 'snippet')
+            if not response.get('items'):
+                raise ValueError(f'Invalid video ID: {self.video_id}')
         
         self._video_name = None 
         self._video_length = None 
         self._channel_id = None
 
     def __repr__(self):
-        return f"Video(video_id={self.video_id}, video_name={self.video_name})"
+        return f"Video(video_id={self.video_id})"
 
     def __eq__(self, other):
         if isinstance(other, Video):

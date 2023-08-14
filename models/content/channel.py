@@ -14,6 +14,7 @@ class Channel(YouTubeAPI):
         self.channel_id = channel_id
         self.validate = False
 
+        # validation is turned off to limit api quotas
         if self.validate:
             response = self.get_channel_response(self.channel_id, 'snippet')
             if not response.get('items'):
