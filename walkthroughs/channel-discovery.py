@@ -1,0 +1,40 @@
+import sys
+sys.path.append('/Users/chrisbudnik/Desktop/Projects/youtube-research')
+
+import csv
+from models.search import YouTubeSearch
+
+
+# For the purpose of this tutorial, search terms were generted by chatGPT for personal finance niche.
+# Example terms: 'Budgeting for beginners', 'Investing for millennials'.
+
+# Parsing search terms saved in .txt file.
+with open('/Users/chrisbudnik/Desktop/Projects/youtube-research/datasets/search-terms/search-finance.txt', 'r') as file:
+    search_terms = [line.strip().strip('"')  for line in file]
+
+# To aviod surpassing api limits, I only select top 5 search terms
+sample = search_terms[:5]
+
+# Crating an instance of YoutubeSearch
+search = YouTubeSearch(keywords=sample)
+
+# Max results is set to 10 (youtube api limit is 50)
+results = search.collect_best_ranking_channels(max_results = 10, 
+                                               order_by="viewCount", 
+                                               only_unique=True)
+
+# Saving results into csv file
+with open('/Users/chrisbudnik/Desktop/Projects/youtube-research/datasets/channels/channel-list-exploration.csv', 'w') as file:
+    writer = csv.writer(file)
+    header = ["channel_id", "channel_name", "uploads_playlist_id", "subscriber_count"]
+    writer.writerow(header)
+
+    for channel in results:
+        # using `info()` method to access main channel properties
+        channel_info = list(channel.info())
+        writer.writerow(channel_info)
+
+print(f"Successfuly saved {len(results)} channels.")
+
+
+
