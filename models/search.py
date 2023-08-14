@@ -37,7 +37,7 @@ class YouTubeSearch(YouTubeAPI):
         all_search_data = []
 
         for key in self.keywords:
-            search_response = self.get_search_response(key, 'id,snippet', type, order_by, max_results, published_after)
+            search_response = self.get_search_response(key, 'id, snippet', type, order_by, max_results, published_after)
 
             for item in search_response.get('items', []):
                     result = item['id'][f'{type}Id']
@@ -55,11 +55,18 @@ class YouTubeSearch(YouTubeAPI):
         search_results = self.execute_search('channel')
 
         channel_ids = []
+        not_found_keywords = []
+
         for key, channel in zip(self.keywords, search_results):
             if key.lower() == channel.channel_name.lower():
                 channel_ids.append(channel.channel_id)
+            else: 
+                not_found_keywords.append(key)
+
+        if not_found_keywords:
+            print(f'Warning: some of the provided keywords were not found: {not_found_keywords}')
         
-        return channel_ids
+        return [Channel(id) for id in channel_ids]
             
     def collect_best_ranking_channels(
             self, 
