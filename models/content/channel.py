@@ -51,6 +51,18 @@ class Channel(YouTubeAPI):
             self._uploads_playlist_id = self.get_playlist_id(type="uploads")
         return self._uploads_playlist_id
     
+    @property
+    def subscriber_count(self) -> int:
+        """
+        The number of subscribers to the channel, lazily loaded upon first access.
+        """
+        if hasattr(self, '_subscriber_count'):
+            return self._subscriber_count
+
+        response = self.get_channel_response(self.channel_id, 'statistics')
+        self._subscriber_count = int(response['items'][0]['statistics']['subscriberCount'])
+        return self._subscriber_count
+    
     def get_channel_videos(self, max_results=5) -> list[Video]:
         """
         Fetches a specified number of videos uploaded to the channel. 
@@ -78,3 +90,5 @@ class Channel(YouTubeAPI):
         channel_response = self.get_channel_response(self.channel_id, 'contentDetails')
         playlist_id = channel_response['items'][0]['contentDetails']['relatedPlaylists'][type]
         return playlist_id
+    
+    
