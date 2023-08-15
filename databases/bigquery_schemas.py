@@ -11,7 +11,7 @@ class Schema(Enum):
     """
     VIDEO_BASE = [
         bigquery.SchemaField("video_id", "STRING", mode="REQUIRED"),
-        bigquery.SchemaField("video_title", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("video_name", "STRING", mode="REQUIRED"),
         bigquery.SchemaField("channel_id", "STRING", mode="REQUIRED"),
         bigquery.SchemaField("channel_name", "STRING", mode="REQUIRED"),
         bigquery.SchemaField("category_id", "STRING", mode="REQUIRED"),
