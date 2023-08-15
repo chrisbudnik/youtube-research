@@ -42,4 +42,6 @@ class Schema(Enum):
     CHANNELS = [
         bigquery.SchemaField("channel_id", "STRING", mode="REQUIRED"),
         bigquery.SchemaField("channel_name", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("uploads_playlist_id", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("subscriber_count", "STRING", mode="REQUIRED"),
     ]
