@@ -1,3 +1,4 @@
+from tqdm import tqdm
 from datetime import datetime, timezone, timedelta
 from typing import Literal, Union, List
 from models.content import Video, Channel, Playlist, YouTubeAPI
@@ -36,7 +37,7 @@ class YouTubeSearch(YouTubeAPI):
 
         all_search_data = []
 
-        for key in self.keywords:
+        for key in tqdm(self.keywords, desc="Collecting results for keyword..."):
             search_response = self.get_search_response(key, 'id, snippet', type, order_by, max_results, published_after)
 
             for item in search_response.get('items', []):
@@ -71,6 +72,7 @@ class YouTubeSearch(YouTubeAPI):
     def collect_best_ranking_channels(
             self, 
             max_results: int = 1, 
+            timeframe: int = 30,
             order_by: Literal["viewCount", "relevance", "date"] = 'viewCount',
             only_unique = True
         ) -> List[Channel]:
@@ -81,7 +83,7 @@ class YouTubeSearch(YouTubeAPI):
         guarante general best ranking results.
         """
 
-        ranking_start_date = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        ranking_start_date = (datetime.now(timezone.utc) - timedelta(days=timeframe)).strftime("%Y-%m-%dT%H:%M:%SZ")
         best_ranking_videos = self.execute_search(type='video', max_results=max_results, published_after=ranking_start_date, order_by=order_by)
 
         best_ranking_channels = [Channel(video.channel_id) for video in best_ranking_videos]
