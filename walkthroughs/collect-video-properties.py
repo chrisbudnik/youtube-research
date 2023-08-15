@@ -10,6 +10,7 @@ sys.path.append('/Users/chrisbudnik/Desktop/Projects/youtube-research')
 import csv
 from models.data_collectors import VideoDataCollector
 from databases.bigquery_connector import BigQueryConnector
+from databases.bigquery_connector import BigQueryTableNames
 
 
 # Save channel ids in list format from csv file
@@ -40,12 +41,9 @@ with open('/Users/chrisbudnik/Desktop/Projects/youtube-research/datasets/project
 
 print(f"Successfuly saved data from {len(data_from_channels)} video.")
 
-
-rows_to_insert = [tuple(item.values()) for item in data_from_channels]
-
 # Create a BigQuery Connection
 connector = BigQueryConnector(dataset_id="youtube")
 
 # Automated insert allows for simple data upload
-connector.automated_insert(table_name="video_base", rows=rows_to_insert)
+connector.automated_insert(BigQueryTableNames.VIDEO_BASE, data=data_from_channels)
 

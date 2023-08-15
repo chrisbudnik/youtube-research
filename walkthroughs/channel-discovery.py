@@ -3,7 +3,8 @@ sys.path.append('/Users/chrisbudnik/Desktop/Projects/youtube-research')
 
 import csv
 from models.search import YouTubeSearch
-
+from databases.bigquery_connector import BigQueryConnector
+from databases.bigquery_connector import BigQueryTableNames
 
 # For the purpose of this tutorial, search terms were generted by chatGPT for personal finance niche.
 # Example terms: 'Budgeting for beginners', 'Investing for millennials'.
@@ -12,7 +13,7 @@ from models.search import YouTubeSearch
 with open('/Users/chrisbudnik/Desktop/Projects/youtube-research/datasets/search-terms/search-finance.txt', 'r') as file:
     search_terms = [line.strip().strip('"')  for line in file]
 
-# To aviod surpassing api limits, I only select top 5 search terms
+# To aviod surpassing api limits, only top 5 search terms were selected
 sample = search_terms[:5]
 
 # Crating an instance of YoutubeSearch
@@ -36,5 +37,9 @@ with open('/Users/chrisbudnik/Desktop/Projects/youtube-research/datasets/channel
 
 print(f"Successfuly saved {len(results)} channels.")
 
+# Create a BigQuery Connection
+connector = BigQueryConnector(dataset_id="youtube")
 
+# Automated insert allows for simple data upload
+connector.automated_insert(BigQueryTableNames.CHANNELS, data=results)
 
