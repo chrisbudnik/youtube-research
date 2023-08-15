@@ -50,18 +50,24 @@ class BigQueryConnector:
         
         print(f"Succesfully created youtube-research project tables: {TABLE_NAMES}")
 
-    def automated_insert(self, table_name: BigQueryTableNames, data: list[dict]) -> None:
+    def automated_insert(self, table_name: BigQueryTableNames, data: List[dict]) -> None:
         """
         Insert rows into the specified table.
         """
         table_ref = self.client.dataset(self.dataset_id).table(table_name.value)
         table = self.client.get_table(table_ref)
 
+        if table_name in [BigQueryTableNames.VIDEO_TEXT, BigQueryTableNames.CHANNELS]:
+            raise NotImplementedError(f"Automated insert is not supported for {table_name.value} table.")
+        
         rows_to_insert = [tuple(item.values()) for item in data]
         errors = self.client.insert_rows(table, rows_to_insert)
 
         if errors:
             raise Exception(f"Encountered errors while inserting rows into {table_name}: {errors}")
+        
+    def automated_csv_insert(self):
+        pass
         
     def automated_query(self, table_name: BigQueryTableNames, columns: List[str]) -> Union[List[str], Dict[str, List]]:
         """
