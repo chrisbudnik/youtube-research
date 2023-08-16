@@ -33,7 +33,7 @@ with open('/Users/chrisbudnik/Desktop/Projects/youtube-research/datasets/channel
     header = ["channel_id", "channel_name", "uploads_playlist_id", "subscriber_count"]
     writer.writerow(header)
 
-    for channel in results:
+    for channel in tqdm(results, desc="Saving channel info ..."):
         channel_info = list(channel.info())
         writer.writerow(channel_info)
 

@@ -67,7 +67,9 @@ class Video(YouTubeAPI):
         ID of the channel the video belongs to. Lazily loaded upon first access.
         """
         if self._channel_id is None:
-            self._channel_id= self.get_video_properties()['channel_id']
+            res = self.get_video_response(self.video_id, 'snippet')
+            self._channel_id = res['items'][0]['snippet']['channelId']
+            
         return self._channel_id
     
     
