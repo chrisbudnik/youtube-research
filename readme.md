@@ -2,6 +2,16 @@
 
 Welcome to the Youtube-Research repository. Dive into an efficient suite designed for extracting and analyzing data from YouTube using the YT API v3. Built with Python, this repository provides comprehensive modules to get the most out of YouTube data.
 
+> :warning: **Heads Up!** :warning:
+>
+> Hey there! I'm shuffling things around a bit. 
+>
+> - Stuff related to the **YouTube API v3** and pulling data from YouTube? It's now over at [`youtube-data`](https://github.com/your-username/youtube-data). You'll find some cool examples there too.
+> - All the **custom database connectors**? They've found a new home at [`youtube-databases`](https://github.com/your-username/youtube-databases).
+>
+> Thanks for sticking around during the shuffle! Check out the new repos for the goodies you're after.
+
+
 ## 📌 Features:
 - **`Video`**: Extract both static properties and dynamic stats.
 - **`Playlist`**: Fetch video IDs from any given playlist.
