@@ -37,6 +37,16 @@ class YouTube:
     def get_video_stats(self, video_id: str):
         params={"id": video_id, "part": "statistics,snippet,contentDetails,topicDetails"}
         return self._request("videos", params=params)
+    
+    def get_channel_stats(self, channel_id: str):
+        params={"id": channel_id, "part": "statistics,snippet,contentDetails,topicDetails"}
+        return self._request("channels", params=params)
+
+    def get_playlist_stats(self, playlist_id: str):
+        params={"playlistId": playlist_id, "part": "snippet,contentDetails"}
+        return self._request("playlistItems", params=params)
+    
+
 
 
 
