@@ -1,4 +1,4 @@
-
+import re
 from datetime import datetime
 from typing import Dict
 from .models import Video
@@ -22,6 +22,18 @@ def convert_iso8601_duration_to_seconds(duration: str) -> int:
 
     Example: 'PT14M8S'
     """
+    pattern = re.compile(r'P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?')
+    match = pattern.match(duration)
+
+    if not match:
+        raise ValueError("Invalid ISO8601 duration format")
+
+    days = int(match.group(1)) if match.group(1) else 0
+    hours = int(match.group(2)) if match.group(2) else 0
+    minutes = int(match.group(3)) if match.group(3) else 0
+    seconds = int(match.group(4)) if match.group(4) else 0
+
+    return days * 86400 + hours * 3600 + minutes * 60 + seconds
 
 def parse_video_output(video: Dict) -> Dict:
     """
