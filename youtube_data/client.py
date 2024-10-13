@@ -1,5 +1,8 @@
 import httpx
 from typing import List
+from .models import Video
+from .utils import parse_video_output
+
 
 class YouTube:
     BASE_URL = "https://www.googleapis.com/youtube/v3"
@@ -51,12 +54,18 @@ class YouTube:
         """
         return str(url).replace(self.api_key, "API_KEY")
     
-    def get_video_details(self, video_ids: List[str]):
+    def get_video_details(self, video_ids: List[str]) -> List[Video]:
+        """
+        Retrieves the details of a list of videos from the YouTube API.
+        Selects the following parts: statistics, snippet, contentDetails, topicDetails.
+        param: video_ids: List[str]: The list of video IDs to retrieve the details for.
+        param: parsed_response: bool: Whether to parse the response into Video objects.
+        return: List[Video]: The list of Video objects.
+        """
 
-        ids = ",".join(video_ids)
-        params={"id": ids, "part": "statistics,snippet,contentDetails,topicDetails"}
-        return self._request("videos", params=params)
-    
+        params={"id": ",".join(video_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
+        response = self._request("videos", params=params)
+        return [parse_video_output(video) for video in response["items"]]
 
 
     def get_channel_details(self, channel_id: str):
