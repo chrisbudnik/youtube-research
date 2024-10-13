@@ -1,7 +1,6 @@
 import re
 from datetime import datetime
-from typing import Dict
-from .models import Video
+from .models import Video, Channel
 
 
 def parse_datetime_from_string(date_string: str) -> datetime:
@@ -35,11 +34,11 @@ def convert_iso8601_duration_to_seconds(duration: str) -> int:
 
     return days * 86400 + hours * 3600 + minutes * 60 + seconds
 
-def parse_video_output(video: Dict) -> Dict:
+def parse_video_output(video: dict) -> Video:
     """
     Parses the video response from the YouTube API.
     param: video: dict: The video response from the YouTube API.
-    return: dict: The parsed video response.
+    return: Video: The parsed video response.
     """
 
     parsed_video = {
@@ -59,3 +58,22 @@ def parse_video_output(video: Dict) -> Dict:
 
     }
     return Video(**parsed_video)
+
+def parse_channel_ouput(channel: dict) -> Channel:
+    """
+    Parses the channel response from the YouTube API.
+    param: channel: dict: The channel response from the YouTube API.
+    return: Channel: The parsed channel response.
+    """
+    parsed_channel = {
+        "channel_id": channel["id"],
+        "channel_title": channel["snippet"]["title"],
+        "description": channel["snippet"]["description"],
+        "custom_url": channel["snippet"].get("customUrl", ""),
+        "published_at": parse_datetime_from_string(channel["snippet"]["publishedAt"]),
+        "uploads_playlist_id": channel["contentDetails"]["relatedPlaylists"]["uploads"],
+        "view_count": int(channel["statistics"].get("viewCount", 0)),
+        "subscriber_count": int(channel["statistics"].get("subscriberCount", 0)),
+        "video_count": int(channel["statistics"].get("videoCount", 0)),
+    }
+    return Channel(**parsed_channel)
