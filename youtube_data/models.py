@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class Video(BaseModel):
     """
-    Video is a template for defining operations to be applied to a DataFrame.
+    Video is a model representing a YouTube video.
     """
     video_id: str
     title: str
@@ -13,7 +13,7 @@ class Video(BaseModel):
     channel_title: str
     published_at: datetime
     duration: int
-    tags: list
+    tags: list[str]
     category_id: int
     view_count: int
     like_count: int
