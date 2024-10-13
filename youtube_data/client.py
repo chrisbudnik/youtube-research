@@ -1,7 +1,7 @@
 import httpx
 #from typing import List, Dict
-from .models import Video
-from .utils import parse_video_output
+from .models import Video, Channel
+from .utils import parse_video_output, parse_channel_output
 
 
 class YouTube:
@@ -54,30 +54,40 @@ class YouTube:
         """
         return str(url).replace(self.api_key, "API_KEY")
     
-    def get_video_details(self, video_ids: list[str], parsed_response: bool = True) -> list[Video] | dict:
+    def get_video_details(self, video_ids: list[str], parsed_response: bool = True) -> list[Video] | list[dict]:
         """
         Retrieves the details of a list of videos from the YouTube API.
-        Selects the following parts: statistics, snippet, contentDetails, topicDetails.
+        Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
         param: video_ids: List[str]: The list of video IDs to retrieve the details for.
         param: parsed_response: bool: Whether to parse the response into Video objects.
-        return: List[Video]: The list of Video objects.
+        return: List[Video] or dict: The list of Video objects or the raw response.
         """
         params={"id": ",".join(video_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("videos", params=params)
-
         if not parsed_response:
             return response["items"]
         
         return [parse_video_output(video) for video in response["items"]]
 
-    def get_channel_details(self, channel_id: str):
-        params={"id": channel_id, "part": "statistics,snippet,contentDetails,topicDetails"}
-        return self._request("channels", params=params)
+    def get_channel_details(self, channel_ids: list[str], parsed_response: bool = True) -> list[Channel] | list[dict]:
+        """
+        Retrieves the details of a list of channels from the YouTube API.
+        Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
+        param: channel_ids: List[str]: The list of channel IDs to retrieve the details for.
+        param: parsed_response: bool: Whether to parse the response into Channel objects.
+        return: List[dict] or dict: 
+        """
+        params={"id": ",".join(channel_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
+        response = self._request("channels", params=params)
+        if not parsed_response:
+            return response["items"]
+        
+        return [parse_channel_output(channel) for channel in response["items"]]
     
     def get_channel_id_from_username(self, username: str) -> str:
-        params={"forUsername": username, "part": "id"}
+        params={"forUsername": username, "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("channels", params=params)
-        return response["items"][0]["id"]
+        return response
 
     def get_playlist_details(self, playlist_id: str):
         params={"playlistId": playlist_id, "part": "snippet,contentDetails"}
