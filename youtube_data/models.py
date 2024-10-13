@@ -19,3 +19,18 @@ class Video(BaseModel):
     like_count: int
     dislike_count: int
     comment_count: int
+
+
+class Channel(BaseModel):
+    """
+    Channel is a model representing a YouTube channel.
+    """
+    channel_id: str
+    channel_title: str
+    description: str
+    custom_url: str
+    published_at: datetime
+    uploads_playlist_id: str
+    view_count: int
+    subscriber_count: int
+    video_count: int
