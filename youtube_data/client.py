@@ -1,7 +1,7 @@
 import httpx
 #from typing import List, Dict
-from .models import Video, Channel
-from .utils import parse_video_output, parse_channel_output
+from .models import Video, Channel, PlaylistItem
+from .utils import parse_video_output, parse_channel_output, parse_playlist_item
 
 
 class YouTube:
@@ -84,16 +84,41 @@ class YouTube:
         
         return [parse_channel_output(channel) for channel in response["items"]]
     
+    def get_playlist_items(
+            self, 
+            playlist_id: str, 
+            max_results: int = 50, 
+            max_results_per_page: int = 50
+        ) -> list[PlaylistItem]:
+        """
+        Retrieves the items in a playlist from the YouTube API.
+        param: playlist_id: str: The ID of the playlist to retrieve the items for.
+        param: max_results: int: The maximum number of items to retrieve.
+        param: max_results_per_page: int: The maximum number of items to retrieve per page 
+            (affects number of requests).
+        return: List[PlaylistItem]: The list of PlaylistItem objects.
+        """
+        playlist_items = []
+        while True:
+            params = {
+                "playlistId": playlist_id,
+                "part": "snippet",
+                "maxResults": max_results_per_page,
+            }
+            response = self._request("playlistItems", params=params)
+            parsed_playlist_items = [parse_playlist_item(item) for item in response["items"]]
+            playlist_items.extend(parsed_playlist_items)
+
+            if len(playlist_items) >= max_results or "nextPageToken" not in response:
+                break
+
+            params["pageToken"] = response["nextPageToken"]
+        return playlist_items
+
     def get_channel_id_from_username(self, username: str) -> str:
         params={"forUsername": username, "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("channels", params=params)
         return response
-
-    def get_playlist_details(self, playlist_id: str):
-        params={"playlistId": playlist_id, "part": "snippet,contentDetails"}
-        return self._request("playlistItems", params=params)
-    
-
 
 
 
