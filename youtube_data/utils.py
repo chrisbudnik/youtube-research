@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from .models import Video, Channel, PlaylistItem
+from .models import Video, Channel, PlaylistItem, SearchItem
 
 
 def parse_datetime_from_string(date_string: str) -> datetime:
@@ -91,3 +91,17 @@ def parse_playlist_item(playlist_item: dict) -> PlaylistItem:
         "position": int(playlist_item["snippet"]["position"]),
     }
     return PlaylistItem(**parsed_playlist_item)
+
+def parse_search_item(search_item: dict) -> SearchItem:
+    """
+    Parses the search item response from the YouTube API.
+    param: search_item: dict: The search item response from the YouTube API.
+    return: SearchItem: The parsed search item response.
+    """
+    parsed_search_item = {
+        "resource_type": search_item["id"]["kind"],
+        "video_id": search_item["id"].get("videoId"),
+        "channel_id": search_item["snippet"].get("channelId"),
+        "playlist_id": search_item["id"].get("playlistId"),
+    }
+    return SearchItem(**parsed_search_item)
