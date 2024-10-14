@@ -1,4 +1,6 @@
 from datetime import datetime
+from typing import Literal, Optional
+from enum import Enum
 from pydantic import BaseModel
 
 
@@ -20,7 +22,6 @@ class Video(BaseModel):
     dislike_count: int
     comment_count: int
 
-
 class Channel(BaseModel):
     """
     Channel is a model representing a YouTube channel.
@@ -35,7 +36,6 @@ class Channel(BaseModel):
     subscriber_count: int
     video_count: int
 
-
 class PlaylistItem(BaseModel):
     """
     PlaylistItem is a model representing an item in a YouTube playlist.
@@ -44,3 +44,14 @@ class PlaylistItem(BaseModel):
     channel_id: str
     video_id: str
     position: int
+
+
+class SearchItem(BaseModel):
+    """
+    SearchItem is a model representing an item in a YouTube search result.
+    """
+    resource_type: Literal["youtube#video", "youtube#channel", "youtube#playlist"]
+    video_id: Optional[str] = None
+    channel_id: Optional[str] = None
+    playlist_id: Optional[str] = None
+
