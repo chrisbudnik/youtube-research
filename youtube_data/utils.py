@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from .models import Video, Channel
+from .models import Video, Channel, PlaylistItem
 
 
 def parse_datetime_from_string(date_string: str) -> datetime:
@@ -59,7 +59,7 @@ def parse_video_output(video: dict) -> Video:
     }
     return Video(**parsed_video)
 
-def parse_channel_ouput(channel: dict) -> Channel:
+def parse_channel_output(channel: dict) -> Channel:
     """
     Parses the channel response from the YouTube API.
     param: channel: dict: The channel response from the YouTube API.
@@ -77,3 +77,17 @@ def parse_channel_ouput(channel: dict) -> Channel:
         "video_count": int(channel["statistics"].get("videoCount", 0)),
     }
     return Channel(**parsed_channel)
+
+def parse_playlist_item(playlist_item: dict) -> PlaylistItem:
+    """
+    Parses the playlist item response from the YouTube API.
+    param: playlist_item: dict: The playlist item response from the YouTube API.
+    return: PlaylistItem: The parsed playlist item response.
+    """
+    parsed_playlist_item = {
+        "playlist_id": playlist_item["snippet"]["playlistId"],
+        "channel_id": playlist_item["snippet"]["channelId"],
+        "video_id": playlist_item["snippet"]["resourceId"]["videoId"],
+        "position": int(playlist_item["snippet"]["position"]),
+    }
+    return PlaylistItem(**parsed_playlist_item)
