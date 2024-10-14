@@ -34,3 +34,13 @@ class Channel(BaseModel):
     view_count: int
     subscriber_count: int
     video_count: int
+
+
+class PlaylistItem(BaseModel):
+    """
+    PlaylistItem is a model representing an item in a YouTube playlist.
+    """
+    playlist_id: str
+    channel_id: str
+    video_id: str
+    position: int
