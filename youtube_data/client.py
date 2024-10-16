@@ -77,6 +77,8 @@ class YouTube:
         """
         Retrieves the details of a list of videos from the YouTube API.
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
+        Endpoint video.list costs 1 quota units per call.
+
         param: video_ids: List[str]: The list of video IDs to retrieve the details for.
         param: parsed_response: bool: Whether to parse the response into Video objects.
         return: List[Video] or dict: The list of Video objects or the raw response.
@@ -92,6 +94,8 @@ class YouTube:
         """
         Retrieves the details of a list of channels from the YouTube API.
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
+        Endpoint channel.list costs 1 quota units per call.
+
         param: channel_ids: List[str]: The list of channel IDs to retrieve the details for.
         param: parsed_response: bool: Whether to parse the response into Channel objects.
         return: List[dict] or dict: 
@@ -111,6 +115,8 @@ class YouTube:
         ) -> list[PlaylistItem]:
         """
         Retrieves the items in a playlist from the YouTube API.
+        Endpoint playlistItems.list costs 1 quota units per call.
+
         param: playlist_id: str: The ID of the playlist to retrieve the items for.
         param: max_results: int: The maximum number of items to retrieve.
         param: max_results_per_page: int: The maximum number of items to retrieve per page 
@@ -152,6 +158,8 @@ class YouTube:
         ) -> list[SearchItem]:
         """
         Searches for videos on YouTube using a keyword.
+        Endpoint search.list costs 100 quota units per call.
+
         param: query: str: The keyword to search for.
         param: order: SearchOrderEnum: The order in which to return the search results.
         param: resource_type: SearchResourceTypeEnum: The type of resource to search for.
@@ -199,7 +207,7 @@ class YouTube:
     @staticmethod
     def get_video_transcript(
         video_id: str, 
-        languages: List[str] = ['en'], 
+        languages: list[str] = ['en'], 
         parse_response: bool = False
     ) -> Union[str | list[dict] | None]:
         """
