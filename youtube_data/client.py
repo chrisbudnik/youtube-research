@@ -1,5 +1,5 @@
 import httpx
-from typing import Literal, Optional
+from typing import List, Dict, Optional, Union
 from datetime import datetime
 from .models import (
     Video, 
@@ -19,6 +19,8 @@ from .enums import (
     SearchVideoDurationEnum, 
     SearchVideoCaptionEnum
 )
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.formatters import TextFormatter
 
 
 class YouTube:
@@ -118,12 +120,12 @@ class YouTube:
         assert max_results_per_page <= 50, "`max_results_per_page` must be less than or equal to 50"
 
         playlist_items = []
+        params = {
+            "playlistId": playlist_id,
+            "part": "snippet",
+            "maxResults": max_results_per_page,
+        }
         while True:
-            params = {
-                "playlistId": playlist_id,
-                "part": "snippet",
-                "maxResults": max_results_per_page,
-            }
             response = self._request("playlistItems", params=params)
             parsed_playlist_items = [parse_playlist_item(item) for item in response["items"]]
             playlist_items.extend(parsed_playlist_items)
@@ -194,7 +196,32 @@ class YouTube:
 
         return items
 
-
+    @staticmethod
+    def get_video_transcript(
+        video_id: str, 
+        languages: List[str] = ['en'], 
+        parse_response: bool = False
+    ) -> Union[str | list[dict] | None]:
+        """
+        Retrieves the transcript of a YouTube video with Youtube-Transcript-API.
+        Authentication is not required for this operation.
+        :param video_id: The ID of the YouTube video.
+        :param languages: A list of language codes to fetch the transcript in, in order of preference.
+        :param formatted: If True, returns a formatted string. If False, returns a list of transcript segments.
+        :return: The video transcript as a string or list of dicts, or None if no transcript is available.
+        """
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
+            if parse_response:
+                formatter = TextFormatter()
+                return formatter.format_transcript(transcript)
+            else:
+                return transcript
+            
+        except Exception as e:
+            print(f"An error occurred while fetching the transcript: {str(e)}")
+            return None
+        
     def get_channel_id_from_username(self, username: str) -> str:
         params={"forUsername": username, "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("channels", params=params)
