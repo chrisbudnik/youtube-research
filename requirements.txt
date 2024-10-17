@@ -1,0 +1,3 @@
+pydantic
+httpx
+youtube_transcript_api
