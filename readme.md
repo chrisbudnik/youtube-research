@@ -18,12 +18,12 @@ This module provides an easy-to-use interface for:
 Retrieve details of one or more YouTube videos.
 
 ```python
-from youtube import YouTube
+from youtube_data.client import YouTube
 
 api_key = 'YOUR_API_KEY'
 youtube = YouTube(api_key)
 
-video_ids = ['dQw4w9WgXcQ', 'VIDEO_ID_2']
+video_ids = ['VIDEO_ID_1', 'VIDEO_ID_2']
 videos = youtube.get_video_details(video_ids)
 
 for video in videos:
@@ -39,12 +39,13 @@ for video in videos:
 Fetch details about one or more YouTube channels.
 
 ```python
-channel_ids = ['UC_x5XG1OV2P6uZZ5FSM9Ttw', 'CHANNEL_ID_2']
+channel_ids = ['CHANNEL_ID_1', 'CHANNEL_ID_2']
 channels = youtube.get_channel_details(channel_ids)
 
 for channel in channels:
     print(f"Channel Title: {channel.title}")
     print(f"Subscribers: {channel.subscriber_count}")
+    print(f"Upload playlist ID: {channel.uploads_playlist_id}")
 ```
 
 ---
@@ -54,7 +55,7 @@ for channel in channels:
 Retrieve all items from a specific playlist.
 
 ```python
-playlist_id = 'PLBCF2DAC6FFB574DE'
+playlist_id = 'PLAYLIST_ID'
 playlist_items = youtube.get_playlist_items(playlist_id)
 
 for item in playlist_items:
@@ -69,8 +70,8 @@ for item in playlist_items:
 Search for videos on YouTube based on a query.
 
 ```python
-from youtube import YouTube
-from enums import SearchOrderEnum
+from youtube_data.client import YouTube
+from youtube_data.enums import SearchOrderEnum, SearchResourceTypeEnum
 
 api_key = 'YOUR_API_KEY'
 youtube = YouTube(api_key)
@@ -78,13 +79,13 @@ youtube = YouTube(api_key)
 search_results = youtube.search(
     query='Python tutorials',
     order=SearchOrderEnum.RELEVANCE,
+    resource_type=SearchResourceTypeEnum.VIDEO,
     max_results=10
 )
 
 for item in search_results:
-    print(f"Title: {item.title}")
-    print(f"Channel: {item.channel_title}")
     print(f"Video ID: {item.video_id}")
+    print(f"Channel ID: {item.channel_id}")
 ```
 
 ---
@@ -94,7 +95,7 @@ for item in search_results:
 Retrieve the transcript of a YouTube video (Youtube-Transcript-API wrapper).
 
 ```python
-video_id = 'dQw4w9WgXcQ'
+video_id = 'VIDEO_ID'
 transcript = youtube.get_video_transcript(video_id, parse_response=True)
 
 print(transcript)
