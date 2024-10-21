@@ -1,6 +1,11 @@
-# **YouTube Data**
+# **YouTube Data Module**
 
-A simple module to interact with the YouTube Data API and retrieve video transcripts.
+A simple module to interact with the YouTube Data API and retrieve video transcripts. 
+Responses are packed into **Pydantic models** for seamless data handling. 
+The module uses raw HTTP requests with **httpx** and optimizes API costs by allowing batch operations — 
+for example, fetching multiple video details at once.
+
+---
 
 ## 🌟 Overview
 
