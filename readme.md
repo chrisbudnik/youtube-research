@@ -1,5 +1,3 @@
-# **Youtube Research**
-
 # **YouTube Data**
 
 A simple module to interact with the YouTube Data API and retrieve video transcripts.
@@ -93,27 +91,13 @@ for item in search_results:
 
 ## 💬 Get Video Transcript
 
-Retrieve the transcript of a YouTube video.
+Retrieve the transcript of a YouTube video (Youtube-Transcript-API wrapper).
 
 ```python
 video_id = 'dQw4w9WgXcQ'
 transcript = youtube.get_video_transcript(video_id, parse_response=True)
 
 print(transcript)
-```
-
----
-
-## 🆔 Get Channel ID from Username
-
-Convert a YouTube username to a channel ID.
-
-```python
-username = 'GoogleDevelopers'
-channel_info = youtube.get_channel_id_from_username(username)
-
-channel_id = channel_info['items'][0]['id']
-print(f"Channel ID for {username}: {channel_id}")
 ```
 
 ---
@@ -125,6 +109,7 @@ print(f"Channel ID for {username}: {channel_id}")
 - **Automated Searching**: Automate the process of searching YouTube for specific content.
 - **Transcription Services**: Fetch video transcripts for subtitling or analysis.
 - **User Data Retrieval**: Convert usernames to channel IDs for further data retrieval.
+
 
 ---
 
