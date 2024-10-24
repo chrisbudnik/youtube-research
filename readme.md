@@ -108,14 +108,14 @@ print(transcript)
 
 ---
 
-📊 Data Collection Strategies
+## 📊 Data Collection Strategies
 This module supports various data collection strategies to efficiently gather information:
 
-Channel-Centric Approach: Start with a list of channel IDs, retrieve their playlist IDs, then fetch video IDs from these playlists, and finally collect detailed video information.
+- Channel-Centric Approach: Start with a list of channel IDs, retrieve their playlist IDs, then fetch video IDs from these playlists, and finally collect detailed video information.
 
-Keyword-Based Channel Discovery: Search for channels based on specific keywords or topics, obtain their channel IDs from the search results, and proceed as in the first approach to gather video data.
+- Keyword-Based Channel Discovery: Search for channels based on specific keywords or topics, obtain their channel IDs from the search results, and proceed as in the first approach to gather video data.
 
-Direct Video Search: Use keywords or topics to search for videos directly, get video IDs from the search results, and then retrieve detailed information about these videos.
+- Direct Video Search: Use keywords or topics to search for videos directly, get video IDs from the search results, and then retrieve detailed information about these videos.
 
 ---
 
