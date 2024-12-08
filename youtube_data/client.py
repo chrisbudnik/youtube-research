@@ -93,6 +93,7 @@ class YouTube:
     def get_channel_details(self, channel_ids: list[str], parsed_response: bool = True) -> list[Channel] | list[dict]:
         """
         Retrieves the details of a list of channels from the YouTube API.
+
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
         Endpoint channel.list costs 1 quota units per call.
 
@@ -230,10 +231,34 @@ class YouTube:
             print(f"An error occurred while fetching the transcript: {str(e)}")
             return None
         
-    def get_channel_id_from_username(self, username: str) -> str:
-        params={"forUsername": username, "part": "statistics,snippet,contentDetails,topicDetails"}
-        response = self._request("channels", params=params)
-        return response
+    def get_channel_id_from_username(self, username: str) -> Optional[str]:
+        """
+        Retrieves the channel ID for a given YouTube username.
+        
+        Args:
+            username (str): The YouTube username to look up
+            
+        Returns:
+            Optional[str]: The channel ID if found, None if the channel doesn't exist
+            
+        Raises:
+            ValueError: If the username is empty or invalid
+            HTTPError: If the API request fails
+        """
+        if not username or not isinstance(username, str):
+            raise ValueError("Username must be a non-empty string")
+            
+        params = {
+            "forUsername": username, 
+            "part": "id"
+        }
+        
+        try:
+            response = self._request("channels", params=params)
+            items = response.get("items", [])
+            return items[0]["id"] if items else None
+        except IndexError:
+            return None
 
 
 
