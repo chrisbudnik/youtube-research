@@ -47,9 +47,13 @@ class YouTube:
     def _request(self, endpoint: str, params: dict = {}) -> dict:
         """
         Sends a GET request to the YouTube API and returns the response.
-        param: endpoint: str: The API endpoint to send the request to.
-        param: params: dict: The query parameters to include in the request.
-        return: dict: The JSON response from the API.
+
+        Args:
+            endpoint (str): The endpoint to send the request to.
+            params (dict): The query parameters to send with the request.
+
+        Returns:
+            dict: The JSON response from the API.
         """
         params['key'] = self.api_key
         url = f"{self.BASE_URL}/{endpoint}"
@@ -68,8 +72,12 @@ class YouTube:
     def _hide_api_key(self, url: httpx.URL | str) -> str:
         """
         Hides the API key in the URL (for logging purposes).
-        param: url: httpx.URL: The URL to hide the API key in.
-        return: str: The URL with the API key replaced by "API_KEY".
+
+        Args:
+            url (httpx.URL | str): The URL to hide the API key in.
+
+        Returns:
+            str: The URL with the API key replaced by "API_KEY".
         """
         return str(url).replace(self.api_key, "API_KEY")
     
@@ -79,9 +87,12 @@ class YouTube:
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
         Endpoint video.list costs 1 quota units per call.
 
-        param: video_ids: List[str]: The list of video IDs to retrieve the details for.
-        param: parsed_response: bool: Whether to parse the response into Video objects.
-        return: List[Video] or dict: The list of Video objects or the raw response.
+        Args:
+            video_ids (List[str]): The list of video IDs to retrieve the details for.
+            parsed_response (bool): Whether to parse the response into Video objects.
+        
+        Returns:
+            List[dict] or dict: The list of Video objects or the raw API response.
         """
         params={"id": ",".join(video_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("videos", params=params)
@@ -93,13 +104,16 @@ class YouTube:
     def get_channel_details(self, channel_ids: list[str], parsed_response: bool = True) -> list[Channel] | list[dict]:
         """
         Retrieves the details of a list of channels from the YouTube API.
-
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
         Endpoint channel.list costs 1 quota units per call.
 
-        param: channel_ids: List[str]: The list of channel IDs to retrieve the details for.
-        param: parsed_response: bool: Whether to parse the response into Channel objects.
-        return: List[dict] or dict: 
+        Args:
+            channel_ids (List[str]): The list of channel IDs to retrieve the details for.
+            parsed_response (bool): Whether to parse the response into Channel objects.
+
+        Returns:
+            List[dict] or dict: The list of Channel objects or the raw API response
+        
         """
         params={"id": ",".join(channel_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("channels", params=params)
@@ -118,11 +132,13 @@ class YouTube:
         Retrieves the items in a playlist from the YouTube API.
         Endpoint playlistItems.list costs 1 quota units per call.
 
-        param: playlist_id: str: The ID of the playlist to retrieve the items for.
-        param: max_results: int: The maximum number of items to retrieve.
-        param: max_results_per_page: int: The maximum number of items to retrieve per page 
-            (affects number of requests).
-        return: List[PlaylistItem]: The list of PlaylistItem objects.
+        Args:
+            playlist_id (str): The ID of the playlist to retrieve the items for.
+            max_results (int): The maximum number of items to retrieve.
+            max_results_per_page (int): The maximum number of items to retrieve per page.
+
+        Returns:
+            List[PlaylistItem]: The list of PlaylistItem objects.
         """
         assert max_results_per_page <= 50, "`max_results_per_page` must be less than or equal to 50"
 
@@ -161,19 +177,21 @@ class YouTube:
         Searches for videos on YouTube using a keyword.
         Endpoint search.list costs 100 quota units per call.
 
-        param: query: str: The keyword to search for.
-        param: order: SearchOrderEnum: The order in which to return the search results.
-        param: resource_type: SearchResourceTypeEnum: The type of resource to search for.
-        param: video_duration: SearchVideoDurationEnum: The duration of the videos to search for.
-        param: video_caption: SearchVideoCaptionEnum: The caption type of the videos to search for.
-        param: region_code: str: The region code to search in.
-        param: relevance_language: str: The language to use for the search results.
-        param: published_before: datetime: The date and time before which the videos were published.
-            The value is converted to RFC 3339 formatted date-time value (1970-01-01T00:00:00Z).
-        param: published_after: datetime: The date and time after which the videos were published.
-            Same format conversion as `published_before`.
-        
-        return: List[SearchItem]: The list of SearchItem objects.
+        Args:
+            query (str): The search query to use.
+            order (SearchOrderEnum): The order to return the results in.
+            resource_type (SearchResourceTypeEnum): The type of resource to search for.
+            video_duration (SearchVideoDurationEnum): The duration of the videos to search for.
+            video_caption (SearchVideoCaptionEnum): The caption type of the videos to search for.
+            region_code (str): The region code to search in.
+            relevance_language (str): The language to search in.
+            published_before (datetime): The date and time to search before.
+            published_after (datetime): The date and time to search after.
+            max_results (int): The maximum number of results to return.
+            **kwargs: Additional query parameters to send with the request.
+
+        Returns:
+            List[SearchItem]: The list of SearchItem objects.
         """
         assert max_results <= 50, "`max_results` must be less than or equal to 50"
 
@@ -214,10 +232,14 @@ class YouTube:
         """
         Retrieves the transcript of a YouTube video with Youtube-Transcript-API.
         Authentication is not required for this operation.
-        :param video_id: The ID of the YouTube video.
-        :param languages: A list of language codes to fetch the transcript in, in order of preference.
-        :param formatted: If True, returns a formatted string. If False, returns a list of transcript segments.
-        :return: The video transcript as a string or list of dicts, or None if no transcript is available.
+
+        Args:
+            video_id (str): The ID of the video to retrieve the transcript for.
+            languages (List[str]): The list of languages to retrieve the transcript in.
+            parse_response (bool): Whether to parse the response into a formatted string.
+
+        Returns:
+            str or List[dict] or None: The formatted transcript or the raw API response
         """
         try:
             transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
