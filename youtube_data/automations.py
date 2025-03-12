@@ -77,9 +77,9 @@ def search_queries_to_channels(
     youtube: YouTube,
     queries: list[str],
     **kwargs
-    ) -> list[Channel]:
+    ) -> list[str]:
     """
-    Takes a list of search queries and returns a list of channel details - 
+    Takes a list of search queries and returns a list of channel ids - 
     based on video search results. Maximum number of queries is 10.
 
     Args:
