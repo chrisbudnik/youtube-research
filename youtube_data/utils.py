@@ -11,7 +11,11 @@ def parse_datetime_from_string(date_string: str) -> datetime:
 
     Example: '2016-12-25T07:48:56Z'
     """
-    return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
+    try:
+        date_formatted = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
+    except Exception as e:
+        date_formatted = date_string
+    return date_formatted
 
 def convert_iso8601_duration_to_seconds(duration: str) -> int:
     """
@@ -105,3 +109,19 @@ def parse_search_item(search_item: dict) -> SearchItem:
         "playlist_id": search_item["id"].get("playlistId"),
     }
     return SearchItem(**parsed_search_item)
+
+def create_chunks(lst, n):
+    """
+    Manages requests limits by creating chunks of youtube object ids.
+
+    Args:
+        lst: list: The list of object ids.
+        n: int: The number of objects per chunk.
+    
+    Returns:
+        list: The list of chunks.
+    """
+    chunks = []
+    for i in range(0, len(lst), n):
+        chunks.append(lst[i:i+n])
+    return chunks
