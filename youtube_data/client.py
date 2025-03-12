@@ -170,7 +170,7 @@ class YouTube:
             relevance_language: Optional[str] = "en",
             published_before: Optional[datetime] = None,
             published_after: Optional[datetime] = None,
-            max_results: int = 5,
+            max_results: int = 50,
             **kwargs
         ) -> list[SearchItem]:
         """
