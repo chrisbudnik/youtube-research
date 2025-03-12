@@ -5,7 +5,8 @@ from .models import (
     Video, 
     Channel, 
     PlaylistItem, 
-    SearchItem
+    SearchItem,
+    VideoTranscript
 )
 from .utils import (
     parse_video_output, 
@@ -113,7 +114,6 @@ class YouTube:
 
         Returns:
             List[dict] or dict: The list of Channel objects or the raw API response
-        
         """
         params={"id": ",".join(channel_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
         response = self._request("channels", params=params)
@@ -227,7 +227,7 @@ class YouTube:
     def get_video_transcript(
         video_id: str, 
         languages: list[str] = ['en'], 
-        parse_response: bool = False
+        parse_response: bool = True
     ) -> Union[str | list[dict] | None]:
         """
         Retrieves the transcript of a YouTube video with Youtube-Transcript-API.
@@ -245,13 +245,13 @@ class YouTube:
             transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
             if parse_response:
                 formatter = TextFormatter()
-                return formatter.format_transcript(transcript)
-            else:
-                return transcript
+                transcript = formatter.format_transcript(transcript)
+                return VideoTranscript(video_id=video_id, transcript=transcript)
+            
+            return transcript
             
         except Exception as e:
-            print(f"An error occurred while fetching the transcript: {str(e)}")
-            return None
+            return VideoTranscript(video_id=video_id, transcript="transcript not available")
         
     def get_channel_id_from_username(self, username: str) -> Optional[str]:
         """
