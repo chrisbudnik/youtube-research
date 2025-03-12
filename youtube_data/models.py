@@ -55,3 +55,10 @@ class SearchItem(BaseModel):
     channel_id: Optional[str] = None
     playlist_id: Optional[str] = None
 
+class VideoTranscript(BaseModel):
+    """
+    VideoTranscript is a model representing a transcript of a YouTube video.
+    """
+    video_id: str
+    transcript: str
+
