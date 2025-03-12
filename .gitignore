@@ -2,3 +2,5 @@ __pycache__/
 *secret.py
 data/
 .DS_Store
+tests/
+tests.ipynb
