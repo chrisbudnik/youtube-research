@@ -1,6 +1,7 @@
 from .client import YouTube
 from .models import Channel, Video, VideoTranscript
 from .utils import create_chunks
+from .enums import SearchResourceTypeEnum   
 
 
 def channel_ids_to_video_details(
@@ -75,8 +76,31 @@ def video_ids_to_video_details(
 def search_queries_to_channels(
     youtube: YouTube,
     queries: list[str],
+    **kwargs
     ) -> list[Channel]:
-    pass
+    """
+    Takes a list of search queries and returns a list of channel details - 
+    based on video search results. Maximum number of queries is 10.
+
+    Args:
+        youtube: YouTube: The YouTube object.
+        queries: list[str]: The list of search queries.
+        **kwargs: The optional arguments for the search method.
+    
+    Returns:
+        list[Channel]: The list of channel
+    """
+    
+    assert len(queries) < 10, "The maximum number of queries is 10."
+    channels = []
+    for query in queries:
+        search = youtube.search(
+            query=query,
+            resource_type=SearchResourceTypeEnum.CHANNEL,
+            **kwargs
+        )
+        channel_ids = [item.channel_id for item in search]
+        channels.extend(channel_ids)
 
 
 def video_ids_to_transcripts(
