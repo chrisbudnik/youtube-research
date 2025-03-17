@@ -13,8 +13,7 @@ def channel_ids_to_video_details(
     """
     Takes a list of channel ids and returns a list of video details.
     This process involves getting the uploads playlist id for each channel 
-    and then getting the video details for each video in the uploads playlist.
-    Last step is to return a list of video details from all the channels.
+    and then fetching the video details for videos contained in the playlist.
 
     Args:
         youtube: YouTube: The YouTube object.
@@ -52,7 +51,8 @@ def video_ids_to_video_details(
 ) -> list[Video]:
     """
     Takes a list of video ids and returns a list of video details.
-    Analagous to channel_ids_to_video_details but for video ids.
+    We are treating video ids as channel ids in this case.
+    Analagous methodology to channel_ids_to_video_details but for video ids.
     Channel ids are extracted from the video ids, then process is the same.
 
     Args:
