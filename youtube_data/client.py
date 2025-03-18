@@ -12,7 +12,8 @@ from .utils import (
     parse_video_output, 
     parse_channel_output, 
     parse_playlist_item,
-    parse_search_item
+    parse_search_item,
+    create_chunks
 )
 from .enums import (
     SearchOrderEnum, 
@@ -82,7 +83,7 @@ class YouTube:
         """
         return str(url).replace(self.api_key, "API_KEY")
     
-    def get_video_details(self, video_ids: list[str], parsed_response: bool = True) -> list[Video] | list[dict]:
+    def get_video_details(self, video_ids: list[str]) -> list[Video] | list[dict]:
         """
         Retrieves the details of a list of videos from the YouTube API.
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
@@ -90,19 +91,22 @@ class YouTube:
 
         Args:
             video_ids (List[str]): The list of video IDs to retrieve the details for.
-            parsed_response (bool): Whether to parse the response into Video objects.
         
         Returns:
             List[dict] or dict: The list of Video objects or the raw API response.
         """
-        params={"id": ",".join(video_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
-        response = self._request("videos", params=params)
-        if not parsed_response:
-            return response["items"]
-        
-        return [parse_video_output(video) for video in response["items"]]
+        video_ids_chunks = create_chunks(video_ids, 50)
 
-    def get_channel_details(self, channel_ids: list[str], parsed_response: bool = True) -> list[Channel] | list[dict]:
+        videos = []
+        for chunk in video_ids_chunks:
+            params = {"id": ",".join(chunk), "part": "statistics,snippet,contentDetails,topicDetails"}
+            response = self._request("videos", params=params)
+            response_parsed = [parse_video_output(video) for video in response["items"]]
+            videos.extend(response_parsed)
+        
+        return videos
+
+    def get_channel_details(self, channel_ids: list[str]) -> list[Channel] | list[dict]:
         """
         Retrieves the details of a list of channels from the YouTube API.
         Selects attributes from the following parts: statistics, snippet, contentDetails, topicDetails.
@@ -110,17 +114,21 @@ class YouTube:
 
         Args:
             channel_ids (List[str]): The list of channel IDs to retrieve the details for.
-            parsed_response (bool): Whether to parse the response into Channel objects.
 
         Returns:
             List[dict] or dict: The list of Channel objects or the raw API response
         """
-        params={"id": ",".join(channel_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
-        response = self._request("channels", params=params)
-        if not parsed_response:
-            return response["items"]
+        channel_ids_chunks = create_chunks(channel_ids, 50)
+
+        channels = []
+        for chunk in channel_ids_chunks:
+            params={"id": ",".join(channel_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
+            response = self._request("channels", params=params)
+            response_parsed = [parse_channel_output(channel) for channel in response["items"]]
+            channels.extend(response_parsed)
         
-        return [parse_channel_output(channel) for channel in response["items"]]
+        return channels
+
     
     def get_playlist_items(
             self, 
