@@ -141,6 +141,8 @@ class YouTube:
             List[PlaylistItem]: The list of PlaylistItem objects.
         """
         assert max_results_per_page <= 50, "`max_results_per_page` must be less than or equal to 50"
+        if max_results < max_results_per_page:
+            max_results_per_page = max_results
 
         playlist_items = []
         params = {
@@ -228,7 +230,7 @@ class YouTube:
         video_id: str, 
         languages: list[str] = ['en'], 
         parse_response: bool = True
-    ) -> Union[str | list[dict] | None]:
+    ) -> Union[VideoTranscript | list[dict] | None]:
         """
         Retrieves the transcript of a YouTube video with Youtube-Transcript-API.
         Authentication is not required for this operation.
