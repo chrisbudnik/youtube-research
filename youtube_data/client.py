@@ -122,7 +122,7 @@ class YouTube:
 
         channels = []
         for chunk in channel_ids_chunks:
-            params={"id": ",".join(channel_ids), "part": "statistics,snippet,contentDetails,topicDetails"}
+            params={"id": ",".join(chunk), "part": "statistics,snippet,contentDetails,topicDetails"}
             response = self._request("channels", params=params)
             response_parsed = [parse_channel_output(channel) for channel in response["items"]]
             channels.extend(response_parsed)
